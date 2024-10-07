@@ -1,2 +1,16 @@
-# graph-theory-week7
-Graph Theory Week 7 Assignment - Dzaky, Reyn, Bima, Faiz
+# Problem 1 - Travelling Salesman Problem
+
+
+
+# Problem 2 - Chinese Postman Problem
+
+
+
+# Problem 3 - The Knight's Tour
+
+
+
+
+
+
+
