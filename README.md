@@ -103,19 +103,15 @@ struct Edge {
     int cost;
 };
 
-void findRoute(int start, unordered_map<int, vector<pair<int, int>>>& adj, vector<int>& route) {
+void findRoute(int startNode, const vector<Edge>& edges, unordered_map<int, vector<pair<int, int>>>& adj, vector<int>& route) {
     stack<int> stack;
-    stack.push(start);
+    stack.push(startNode);
     vector<int> currentPath;
     unordered_map<int, int> visitedEdges;
 
     while (!stack.empty()) {
         int current = stack.top();
         bool hasEdge = false;
-
-        sort(adj[current].begin(), adj[current].end(), [](const auto& a, const auto& b) {
-            return a.second < b.second;
-        });
 
         while (!adj[current].empty()) {
             auto next = adj[current].back();
@@ -125,7 +121,7 @@ void findRoute(int start, unordered_map<int, vector<pair<int, int>>>& adj, vecto
             if (visitedEdges[edgeId] < 1) {
                 visitedEdges[edgeId]++;
                 stack.push(nextVertex);
-                currentPath.push_back(edgeId);
+                currentPath.push_back(edgeId); // Store the edge ID
                 adj[current].pop_back();
                 current = nextVertex;
                 hasEdge = true;
@@ -201,7 +197,19 @@ int main() {
     int totalFinalCost = totalCost + additionalCost;
 
     vector<int> route;
-    findRoute(0, adj, route);
+    
+    unordered_map<int, vector<pair<int, int>>> orderedAdj;
+    for (const auto& edge : edges) {
+        orderedAdj[edge.u].emplace_back(edge.id, edge.v);
+        orderedAdj[edge.v].emplace_back(edge.id, edge.u);
+    }
+
+    findRoute(0, edges, orderedAdj, route);
+
+    // Ensure the route ends at the starting node's edge
+    if (!route.empty()) {
+        route.push_back(route[0]); // Add the starting edge again to return
+    }
 
     cout << "Cost: " << totalFinalCost << endl;
     cout << "Route: ";
@@ -215,7 +223,6 @@ int main() {
 
     return 0;
 }
-
 ```
   
 # Problem 3 - The Knight's Tour
