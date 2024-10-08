@@ -94,6 +94,7 @@ int main() {
 #include <unordered_map>
 #include <algorithm>
 #include <stack>
+#include <climits> // Include this for INT_MAX
 
 using namespace std;
 
@@ -121,7 +122,7 @@ void findRoute(int startNode, const vector<Edge>& edges, unordered_map<int, vect
             if (visitedEdges[edgeId] < 1) {
                 visitedEdges[edgeId]++;
                 stack.push(nextVertex);
-                currentPath.push_back(edgeId); // Store the edge ID
+                currentPath.push_back(edgeId);
                 adj[current].pop_back();
                 current = nextVertex;
                 hasEdge = true;
@@ -206,9 +207,8 @@ int main() {
 
     findRoute(0, edges, orderedAdj, route);
 
-    // Ensure the route ends at the starting node's edge
     if (!route.empty()) {
-        route.push_back(route[0]); // Add the starting edge again to return
+        route.push_back(route[0]);
     }
 
     cout << "Cost: " << totalFinalCost << endl;
@@ -223,6 +223,7 @@ int main() {
 
     return 0;
 }
+
 ```
   
 # Problem 3 - The Knight's Tour
