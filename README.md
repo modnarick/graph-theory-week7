@@ -1,8 +1,99 @@
 # Problem 1 - Travelling Salesman & Chinese Postman Problem
   
+``` cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+#include <unordered_map>
+
+using namespace std;
+
+const int INF = INT_MAX;
+
+struct Edge {
+    int id;
+    int u, v;
+    int cost;
+};
+
+void tsp(int n, vector<vector<int>>& graph, int start, vector<Edge>& edges, unordered_map<int, int>& edge_map) {
+    vector<int> vertices;
+    for (int i = 0; i < n; i++) {
+        if (i != start) {
+            vertices.push_back(i);
+        }
+    }
+
+    int min_cost = INF;
+    vector<int> best_path_edges;
+
+    do {
+        int current_cost = 0;
+        int current_vertex = start;
+        vector<int> current_path_edges;
+
+        for (int i = 0; i < vertices.size(); i++) {
+            current_cost += graph[current_vertex][vertices[i]];
+            current_path_edges.push_back(edge_map[current_vertex * n + vertices[i]]);
+            current_vertex = vertices[i];
+        }
+
+        current_cost += graph[current_vertex][start];
+        current_path_edges.push_back(edge_map[current_vertex * n + start]);
+
+        if (current_cost < min_cost) {
+            min_cost = current_cost;
+            best_path_edges = current_path_edges;
+        }
+
+    } while (next_permutation(vertices.begin(), vertices.end()));
+
+    cout << "Cost: " << min_cost << endl;
+    cout << "Route: ";
+    for (int i = 0; i < best_path_edges.size(); i++) {
+        cout << best_path_edges[i];
+        if (i != best_path_edges.size() - 1) {
+            cout << ", ";
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    int n, e;
+    
+    cin >> n >> e;
+
+    vector<vector<int>> graph(n, vector<int>(n, INF));
+    vector<Edge> edges(e);
+    unordered_map<int, int> edge_map;
+
+    for (int i = 0; i < e; i++) {
+        int edge, u, v, cost;
+        cin >> edge >> u >> v >> cost;
+        edges[i] = {edge, u - 1, v - 1, cost};
+        graph[u - 1][v - 1] = cost;
+        graph[v - 1][u - 1] = cost;
+        edge_map[(u - 1) * n + (v - 1)] = edge;
+        edge_map[(v - 1) * n + (u - 1)] = edge;
+    }
+    
+    int start_node;
+    cin >> start_node;
+    start_node -= 1;
+
+    tsp(n, graph, start_node, edges, edge_map);
+
+    return 0;
+}
+```
+  
+# Problem 2 - Chinese Postman Problem
+  
 *blank*
   
-# Problem 2 - The Knight's Tour
+# Problem 3 - The Knight's Tour
   
 ``` cpp
 #include <bits/stdc++.h>
