@@ -314,6 +314,98 @@ int main() {
 }
 ```
 
+Revised for the input from fixed square (ex : 6x6, 7x7, 8x8) to the adjustable rectangle (ex : 5x7, 6x8, 9x6)
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int dx[8] = {2, 1, -1, -2, -2, -1, 1, 2};
+int dy[8] = {1, 2, 2, 1, -1, -2, -2, -1};
+
+bool validMove(int x, int y, int rows, int columns, vector<vector<int>>& visited) {
+    return (x >= 0 && x < rows && y >= 0 && y < columns && visited[x][y] == -1);
+}
+
+int remainingMoves(int x, int y, int rows, int columns, vector<vector<int>>& visited) {
+    int count = 0;
+    for (int i = 0; i < 8; ++i) {
+        int nextX = x + dx[i];
+        int nextY = y + dy[i];
+        if (validMove(nextX, nextY, rows, columns, visited)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+void printPath(vector<pair<int, int>>& path) {
+    for (const auto& move : path) {
+        cout << move.first << " " << move.second << endl;
+    }
+}
+
+bool knightsTour(int x, int y, int moveCount, int rows, int columns, vector<vector<int>>& visited, vector<pair<int, int>>& path) {
+    if (moveCount == rows * columns) {
+        return true;
+    }
+
+    vector<pair<int, pair<int, int>>> moves;
+    for (int i = 0; i < 8; ++i) {
+        int nextX = x + dx[i];
+        int nextY = y + dy[i];
+        if (validMove(nextX, nextY, rows, columns, visited)) {
+            int count = remainingMoves(nextX, nextY, rows, columns, visited);
+            moves.push_back({count, {nextX, nextY}});
+        }
+    }
+
+    sort(moves.begin(), moves.end());
+    for (auto& move : moves) {
+        int nextX = move.second.first;
+        int nextY = move.second.second;
+        visited[nextX][nextY] = moveCount;
+        path.push_back({nextX, nextY});
+
+        if (knightsTour(nextX, nextY, moveCount + 1, rows, columns, visited, path)) {
+            return true;
+        }
+
+        visited[nextX][nextY] = -1;
+        path.pop_back();
+    }
+
+    return false;
+}
+
+int main() {
+    int rows, columns;
+    cout << "input dimension:" << endl;
+    cin >> rows >> columns;
+    int startX, startY;
+    cout << "input starting point:" << endl;
+    cin >> startX >> startY;
+    cout << "output:" << endl;
+
+
+    if (startX < 0 || startX >= rows || startY < 0 || startY >= columns)
+        cout << "No solution found!" << endl;
+    else {
+        vector<vector<int>> visited(rows, vector<int>(columns, -1));
+        visited[startX][startY] = 0;
+        vector<pair<int, int>> path;
+        path.push_back({startX, startY});
+
+        if (knightsTour(startX, startY, 1, rows, columns, visited, path)) {
+            printPath(path);
+        }
+        else {
+        cout << "No solution found!" << endl;
+        }
+    }
+    return 0;
+}
+```
 
 
 
