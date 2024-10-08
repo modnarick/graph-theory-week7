@@ -88,7 +88,135 @@ int main() {
   
 # Problem 2 - Chinese Postman Problem
   
-*blank*
+``` cpp
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <stack>
+
+using namespace std;
+
+struct Edge {
+    int id;
+    int u, v;
+    int cost;
+};
+
+void findRoute(int start, unordered_map<int, vector<pair<int, int>>>& adj, vector<int>& route) {
+    stack<int> stack;
+    stack.push(start);
+    vector<int> currentPath;
+    unordered_map<int, int> visitedEdges;
+
+    while (!stack.empty()) {
+        int current = stack.top();
+        bool hasEdge = false;
+
+        sort(adj[current].begin(), adj[current].end(), [](const auto& a, const auto& b) {
+            return a.second < b.second;
+        });
+
+        while (!adj[current].empty()) {
+            auto next = adj[current].back();
+            int edgeId = next.first;
+            int nextVertex = next.second;
+
+            if (visitedEdges[edgeId] < 1) {
+                visitedEdges[edgeId]++;
+                stack.push(nextVertex);
+                currentPath.push_back(edgeId);
+                adj[current].pop_back();
+                current = nextVertex;
+                hasEdge = true;
+                break;
+            } else {
+                adj[current].pop_back();
+            }
+        }
+
+        if (!hasEdge) {
+            stack.pop();
+        }
+    }
+
+    route = currentPath;
+}
+
+int main() {
+    int n, e;
+
+    cin >> n >> e;
+
+    vector<Edge> edges(e);
+    vector<int> degree(n, 0);
+    unordered_map<int, vector<pair<int, int>>> adj;
+
+    for (int i = 0; i < e; i++) {
+        int edge, u, v, cost;
+        cin >> edge >> u >> v >> cost;
+        edges[i] = {edge, u - 1, v - 1, cost};
+        degree[u - 1]++;
+        degree[v - 1]++;
+        
+        adj[u - 1].emplace_back(edge, v - 1);
+        adj[v - 1].emplace_back(edge, u - 1);
+    }
+
+    int totalCost = 0;
+    for (const auto& edge : edges) {
+        totalCost += edge.cost;
+    }
+
+    vector<int> oddVertices;
+    for (int i = 0; i < n; i++) {
+        if (degree[i] % 2 == 1) {
+            oddVertices.push_back(i);
+        }
+    }
+
+    int additionalCost = 0;
+    if (oddVertices.size() == 2) {
+        int u = oddVertices[0], v = oddVertices[1];
+        vector<vector<int>> dist(n, vector<int>(n, INT_MAX));
+
+        for (const auto& edge : edges) {
+            dist[edge.u][edge.v] = edge.cost;
+            dist[edge.v][edge.u] = edge.cost;
+        }
+
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (dist[i][k] < INT_MAX && dist[k][j] < INT_MAX) {
+                        dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+                    }
+                }
+            }
+        }
+
+        additionalCost = dist[u][v];
+    }
+
+    int totalFinalCost = totalCost + additionalCost;
+
+    vector<int> route;
+    findRoute(0, adj, route);
+
+    cout << "Cost: " << totalFinalCost << endl;
+    cout << "Route: ";
+    for (int i = 0; i < route.size(); i++) {
+        cout << edges[route[i]].id;
+        if (i != route.size() - 1) {
+            cout << ", ";
+        }
+    }
+    cout << endl;
+
+    return 0;
+}
+
+```
   
 # Problem 3 - The Knight's Tour
   
