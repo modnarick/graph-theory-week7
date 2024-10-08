@@ -1,12 +1,8 @@
 # Problem 1 - Travelling Salesman & Chinese Postman Problem
   
 ``` cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <climits>
-#include <unordered_map>
 
+#include <bits/stdc++.h>
 using namespace std;
 
 const int INF = INT_MAX;
@@ -86,6 +82,7 @@ int main() {
     tsp(n, graph, start_node, edges, edge_map);
 
     return 0;
+}
 }
 ```
   
