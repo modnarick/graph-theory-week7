@@ -1,4 +1,4 @@
-# Problem 1 - Travelling Salesman & Chinese Postman Problem
+# Problem 1 - Travelling Salesman Problem
   
 ``` cpp
 
