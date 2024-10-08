@@ -89,14 +89,10 @@ int main() {
 # Problem 2 - Chinese Postman Problem
   
 ``` cpp
-#include <iostream>
-#include <vector>
-#include <unordered_map>
-#include <algorithm>
-#include <stack>
-#include <climits> // Include this for INT_MAX
-
+#include <bits/stdc++.h>
 using namespace std;
+
+const int INF = INT_MAX;
 
 struct Edge {
     int id;
@@ -223,6 +219,7 @@ int main() {
 
     return 0;
 }
+
 
 ```
   
