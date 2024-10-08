@@ -1,12 +1,8 @@
-# Problem 1 - Travelling Salesman Problem
+# Problem 1 - Travelling Salesman & Chinese Postman Problem
   
-*isi disini
+*blank*
   
-# Problem 2 - Chinese Postman Problem
-  
-*isi disini
-  
-# Problem 3 - The Knight's Tour
+# Problem 2 - The Knight's Tour
   
 ``` cpp
 #include <bits/stdc++.h>
